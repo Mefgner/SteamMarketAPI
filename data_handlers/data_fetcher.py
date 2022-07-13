@@ -9,7 +9,6 @@ class _DataFetcher(object):
 	                   '(KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'
 	_quantity: int
 	_filter: str
-	_country: str
 	_language: str
 	_currency: str
 
@@ -45,7 +44,7 @@ class _DataFetcher(object):
 
 		return self._get_json(link, params={
 				'filter': self._filter, 'start': start, 'count': count,
-				'country': self._country, 'language': self._language, 'currency': self._currency
+				'language': self._language, 'currency': self._currency
 		})
 
 	def _get_float_api_page(self, lookup_link: str):
@@ -58,11 +57,11 @@ class _DataFetcher(object):
 				'url': lookup_link
 		})
 
-	# def get_icon(self, token: str):
-	# 	if not isinstance(token, str):
-	# 		raise TypeError
-	#
-	# 	link = f'https://community.cloudflare.steamstatic.com/economy/image/{token}'
-	# 	response = self._get_page(link)
-	#
-	# 	return response.content
+# def get_icon(self, token: str):
+# 	if not isinstance(token, str):
+# 		raise TypeError
+#
+# 	link = f'https://community.cloudflare.steamstatic.com/economy/image/{token}'
+# 	response = self._get_page(link)
+#
+# 	return response.content

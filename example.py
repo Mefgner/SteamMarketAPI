@@ -1,12 +1,12 @@
 from smapi import SteamMarketHandler
-from info.locales import Locales
+from info import Locales, Currencies
 import asyncio
 
 
 async def main():
 	smh_obj = SteamMarketHandler(
 			'https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Vulcan%20%28Field-Tested%29',
-			quantity=0, language=Locales.UA, currency=Locales.UA,
+			quantity=15, language=Locales.RU, currency=Currencies.UAH,
 	)
 
 	# for x in smh_obj.get_weapon_info:

@@ -47,7 +47,7 @@ class _DataParser(_DataFetcher):
 			# rarity: str
 			# description: str
 			# collection: str
-			# price: float
+			# price: Price
 			stickers: list[Sticker] | None = list()
 			# nametag: str | None
 			# lookup_link: str
@@ -94,7 +94,8 @@ class _DataParser(_DataFetcher):
 
 			converted_price = current_listing['converted_price']
 			converted_fee = current_listing['converted_fee']
-			price = (converted_price + converted_fee) / 100
+			price_float = (converted_price + converted_fee) / 100
+			price = Price(price_float, self._currency_tag)
 
 			assets_key = assets_keys.pop(0)
 
@@ -178,14 +179,13 @@ class _DataParser(_DataFetcher):
 		return parse_result  # parse_result[0] if len(parse_result) == 1 else parse_result
 
 	def __init__(self, url: str, user_agen: str = '', quantity: int = 0, query: str = '',
-	             country: Locale = Locales.US, language: Locale = Locales.US, currency: Locale = Locales.US) -> None:
+	             language: Locale = Locales.US, currency: Currency = Currencies.USD) -> None:
 		if not (isinstance(url, str) and
 		        isinstance(user_agen, str) and
 		        isinstance(quantity, int) and
 		        isinstance(query, str) and
-		        isinstance(country, Locale) and
 		        isinstance(language, Locale) and
-		        isinstance(currency, Locale)):
+		        isinstance(currency, Currency)):
 			raise TypeError
 
 		self._url = url
@@ -193,6 +193,6 @@ class _DataParser(_DataFetcher):
 			self._user_agent = user_agen
 		self._quantity = quantity
 		self._filter = query
-		self._country = country.country
 		self._language = language.language
-		self._currency = currency.currency
+		self._currency = currency.currency_api
+		self._currency_tag = currency.currency_tag

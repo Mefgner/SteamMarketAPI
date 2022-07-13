@@ -9,17 +9,16 @@ class SteamMarketHandler:
 	""""""
 
 	def __init__(self, url: str, user_agen: str = '', quantity: int = 0, query: str = '',
-	             country: Locale = Locales.US, language: Locale = Locales.US, currency: Locale = Locales.US) -> None:
+	             language: Locale = Locales.US, currency: Currency = Currencies.USD) -> None:
 		if not (isinstance(url, str) and
 		        isinstance(user_agen, str) and
 		        isinstance(quantity, int) and
 		        isinstance(query, str) and
-		        isinstance(country, Locale) and
 		        isinstance(language, Locale) and
-		        isinstance(currency, Locale)):
+		        isinstance(currency, Currency)):
 			raise TypeError
 
-		self.__DataFetcherObject = _DataParser(url, user_agen, quantity, query, country, language, currency)
+		self.__DataFetcherObject = _DataParser(url, user_agen, quantity, query, language, currency)
 
 		self._info: list[WeaponInfo] = self.__DataFetcherObject.get_parsed_info()
 
