@@ -106,7 +106,7 @@ class _DataParser(_DataFetcher):
 
 			descriptions = current_assets['descriptions']
 			description_html = descriptions[2]['value']
-			raw = bs(description_html, 'html.parser').text
+			description = bs(description_html, 'html.parser').text
 			collection = descriptions[4]['value']
 
 			if (len(descriptions) == 7 and descriptions[6]['value'] != ' ') or len(descriptions) == 8:
