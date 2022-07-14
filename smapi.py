@@ -63,7 +63,7 @@ class SteamMarketHandler:
 		return [asdict(item) for item in self._info]
 
 	def sorted(self, with_stickers: bool = True, with_nametag: bool = True) -> list[dict[str, Any]]:
-		"""Returns list of dicts only witch contains stickers or nametag
+		"""Returns list of dicts only which contains stickers or nametag
 		
 		Instead of self argument you can put list with dicts in not initialised class to use it with filtered function
 		

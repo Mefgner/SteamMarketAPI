@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Price:
+	"""Price dataclass gives you a possibility to you get price of weapon in any form"""
 	value: float | int
 	tag: str
 
@@ -18,6 +19,7 @@ class Price:
 
 @dataclass
 class Sticker:
+	"""Sticker class contains general information about the sticker"""
 	name: str
 	img_link: str
 	slot: int
@@ -26,6 +28,7 @@ class Sticker:
 
 @dataclass
 class WeaponInfo:
+	"""Weapon class contains general information about the weapon"""
 	name: str
 	weapon_type: str
 	rarity: str
