@@ -6,10 +6,19 @@ import asyncio
 
 
 class SteamMarketHandler:
-	""""""
+	"""The class that provides you to automatize using of Community Market in Steam for CSGO the game."""
 
 	def __init__(self, url: str, user_agen: str = '', quantity: int = 0, query: str = '',
 	             language: Locale = Locales.US, currency: Currency = Currencies.USD) -> None:
+		"""Intializator of Steam Market Handler class
+		
+		:param str url: Link to listing in Steam Community Market
+		:param str user_agent: User agent for data gathering from internet, leave empty for using default value of it
+		:param int quantity: Count of all lots that will be parsed, leave 0 to parse all items
+		:param str query: Specified filter for gather data from Steam Market, use it if you want to get specific stickers just entered name of it
+		:param Locale language: Language settings that you can pick from Locales class
+		:param Currency currency: Currency settings that you can pick from Currencies class
+		:raises TypeError: If some type doesn't match"""
 		if not (isinstance(url, str) and
 		        isinstance(user_agen, str) and
 		        isinstance(quantity, int) and
@@ -22,14 +31,20 @@ class SteamMarketHandler:
 
 		self._info: list[WeaponInfo] = self.__DataFetcherObject.get_parsed_info()
 
-	async def iterate_once(self, interval: float | int = 30):
-		if interval < 30:
-			raise ValueError
+	async def iterate_once(self, interval: float | int = 0.0):
+		"""Gather information in internet in corontine and puts it in itself
+		
+		:param float | int interval: Interval before information will be gathered"""
 
 		await asyncio.sleep(interval)
 		self._info = self.__DataFetcherObject.get_parsed_info()
 
 	async def loop(self, interval: float | int = 30.0):
+		"""Stars loop that will gather information with interval
+		
+		:param float | int interval: Interval before information will be gathered, min value is 30 seconds
+		:raises ValueError: If interval less than 30 sesonds"""
+		
 		if interval < 30:
 			raise ValueError
 
@@ -37,11 +52,24 @@ class SteamMarketHandler:
 			await self.iterate_once(interval)
 			yield
 
-	def _turn_to_dict(self):
+	def _turn_to_dict(self) -> list[dict[str, Any]]:
+		"""Returns list with dicts instead of WeaponInfo dataclasses
+		
+		:return: List with dicts
+		:rtype: list"""
 		return [asdict(item) for item in self._info]
 
 	def sorted(self, with_stickers: bool = True, with_nametag: bool = True) -> list[dict[str, Any]]:
-		if not (isinstance(with_stickers, bool) and isinstance(with_nametag, bool)):
+		"""Returns list of dicts only witch contains stickers or nametag
+		
+		Instead of self argument you can put list with dicts in not initialised class to use it with formated function
+		
+		:param bool with_stickers: Looking for lots only with stickers
+		:param bool with_nametag: Looking for lots olny with nametag
+		:return: List with dicts instead of WeaponInfo dataclasses
+		:rtype list[dict[str, Any]]:
+		:raises TypeError: If some types doesn't match"""
+		if not ( isinstance(with_stickers, bool) and isinstance(with_nametag, bool)):
 			raise TypeError
 
 		if not isinstance(self, list):
@@ -60,9 +88,17 @@ class SteamMarketHandler:
 
 		return sorted_info
 
-	def filtered(self, **kwargs) -> list[dict[str, Any]]:  # __filter: tuple[bool] | list[bool]
-		# if not (isinstance(__filter, tuple) or isinstance(__filter, list)):
-		# 	raise TypeError
+	def filtered(self, **kwargs) -> list[dict[str, Any]]:
+		"""Returns only fields that you chose
+		
+		Instead of self argument you can put list with dicts in not initialiaed class to use it with sorted function in case if you left stickers or nametag fields
+		
+		:params dict[str, bool] **kwargs: To choose the fields that you want to leave just enter their name and set True value
+		:return: List of dict instead of WeaponInfo dataclasses
+		:rtype list[dict[str, Any]]:
+		:raises TypeError: If value in **kwargs isn't bool type
+		:raises ValueError: If WeaponInfo doesn't contains names of **kwargs"""
+
 		if not isinstance(self, list):
 			info = self._turn_to_dict()
 		else:
@@ -74,10 +110,7 @@ class SteamMarketHandler:
 
 		for value in kwargs.values():
 			if not isinstance(value, bool):
-				raise ValueError
-
-		# if not len(info[0]) == len(__filter):
-		# 	raise ValueError(f'length of unfiltered - {len(info[0])} and length of filter - {len(__filter)}')
+				raise TypeError
 
 		filtered = list()
 		for item in info:
@@ -89,21 +122,20 @@ class SteamMarketHandler:
 
 			filtered.append(filtered_dict)
 
-		# for item in info:
-		#
-		# 	filtered_dict = dict()
-		# 	for pos, field in enumerate(item):
-		# 		if __filter[pos]:
-		# 			filtered_dict.update({field: item[field]})
-		#
-		# 	filtered.append(filtered_dict)
-
 		return filtered
 
 	@property
 	def get_weapon_info(self) -> list[WeaponInfo]:
+		"""Returns info of all lots
+		
+		:return: List with WeaponInfo dataclasses
+		:rtype list[WeaponInfo]:"""
 		return self._info
 
 	@property
 	def get_weapon_info_as_dict(self) -> list[dict[str, Any]]:
+		"""Returns info of all lots in dict form
+		
+		:return: List with dict representation of WeaponInfo dataclasses
+		:rtype list[dict[str, Any]]:"""
 		return self._turn_to_dict()
