@@ -3,12 +3,37 @@ from .data_fetcher import _DataFetcher
 from info import *
 
 
-class _DataParser(_DataFetcher):
-	""""""
+class _DataParser(object):
+	_user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
+	              'Chrome/102.0.0.0 Safari/537.36'
+
+	def __init__(self, url: str, user_agent: str = '', custom_csgo_float: str = '', quantity: int = 0, query: str = '',
+	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD) -> None:
+		if not (isinstance(url, str) and
+		        isinstance(user_agent, str) and
+		        isinstance(custom_csgo_float, str) and
+		        isinstance(quantity, int) and
+		        isinstance(query, str) and
+		        isinstance(language, _Locale) and
+		        isinstance(currency, _Currency)):
+			raise TypeError
+
+		self._url = url
+		if not user_agent == '':
+			self._user_agent = user_agent
+		self._custom_csgo_float = custom_csgo_float
+		self._quantity = quantity
+		self._filter = query
+		self._language = language.language
+		self._currency = currency.currency_api
+		self._currency_tag = currency.currency_tag
+
+		self.fetcher = _DataFetcher()
 
 	def _get_info(self) -> dict[str, [str, int]] | list[dict]:
-		test = self._get_steam_market_page(0, 1)
-		if not test['success']:
+		test = self.fetcher.get_steam_market_page(self._url, self._user_agent, self._filter,
+		                                          self._language, self._currency, 0, 1)
+		if not test.get('success', False):
 			raise RuntimeError
 
 		total_count = test['total_count']
@@ -16,7 +41,8 @@ class _DataParser(_DataFetcher):
 			self._quantity = total_count
 
 		if self._quantity <= 100:
-			return self._get_steam_market_page(0, self._quantity)
+			return self.fetcher.get_steam_market_page(self._url, self._user_agent, self._filter,
+			                                          self._language, self._currency, 0, self._quantity)
 		elif self._quantity > 100:
 			json_list = list()
 			start, count = 0, 0
@@ -28,7 +54,8 @@ class _DataParser(_DataFetcher):
 					count = total_count
 				total_count -= count
 
-				json_list.append(self._get_steam_market_page(start, count))
+				json_list.append(self.fetcher.get_steam_market_page(self._url, self._user_agent, self._filter,
+				                                                    self._language, self._currency, start, count))
 
 				start = count
 				if total_count == 0:
@@ -77,7 +104,7 @@ class _DataParser(_DataFetcher):
 			lookup_link_form = current_listings_asset['market_actions'][0]['link']
 			lookup_link = lookup_link_form.replace('%listingid%', listing_id).replace('%assetid%', asset_id)
 
-			float_api_response = self._get_float_api_page(lookup_link)
+			float_api_response = self.fetcher.get_float_api_page(lookup_link, self._user_agent, self._custom_csgo_float)
 
 			float_api_response_body = float_api_response['iteminfo']
 			float_api_stickers = float_api_response_body['stickers']
@@ -133,8 +160,7 @@ class _DataParser(_DataFetcher):
 					if sticker_icon_links == [] and sticker_names == [] and sticker_slots == [] and sticker_wears == []:
 						break
 					elif sticker_icon_links == [] or sticker_names == [] or sticker_slots == [] or sticker_wears == []:
-						raise RuntimeError(
-							raw_sticker_names)  # ([sticker_icon_links, sticker_names, sticker_slots, sticker_wears])
+						raise RuntimeError(raw_sticker_names)
 			else:
 				stickers = None
 
@@ -179,22 +205,3 @@ class _DataParser(_DataFetcher):
 			parse_result.extend(self._parse(raw_data))
 
 		return parse_result  # parse_result[0] if len(parse_result) == 1 else parse_result
-
-	def __init__(self, url: str, user_agent: str = '', quantity: int = 0, query: str = '',
-	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD) -> None:
-		if not (isinstance(url, str) and
-		        isinstance(user_agent, str) and
-		        isinstance(quantity, int) and
-		        isinstance(query, str) and
-		        isinstance(language, _Locale) and
-		        isinstance(currency, _Currency)):
-			raise TypeError
-
-		self._url = url
-		if not user_agent == '':
-			self._user_agent = user_agent
-		self._quantity = quantity
-		self._filter = query
-		self._language = language.language
-		self._currency = currency.currency_api
-		self._currency_tag = currency.currency_tag

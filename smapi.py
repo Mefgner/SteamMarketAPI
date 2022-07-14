@@ -8,12 +8,13 @@ import asyncio
 class SteamMarketHandler:
 	"""The class that provides you to automatize using of Community Market in Steam for CSGO the game."""
 
-	def __init__(self, url: str, user_agent: str = '', quantity: int = 0, query: str = '',
+	def __init__(self, url: str, user_agent: str = '', custom_csgo_float: str = '', quantity: int = 0, query: str = '',
 	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD) -> None:
 		"""Initializer of Steam Market Handler class
 		
 		:param str url: Link to listing in Steam Community Market
 		:param str user_agent: User agent for data gathering from internet, leave empty for using default value of it
+		:param str custom_csgo_float: Custom address to CSGO Float Api, in case if you are hosting this api yourself
 		:param int quantity: Count of all lots that will be parsed, leave 0 to parse all items
 		:param str query: Specified filter for gather data from Steam Market, use it if you want to get specific stickers
 		just entered name of it
@@ -22,13 +23,14 @@ class SteamMarketHandler:
 		:raises TypeError: If some type doesn't match"""
 		if not (isinstance(url, str) and
 		        isinstance(user_agent, str) and
+		        isinstance(custom_csgo_float, str) and
 		        isinstance(quantity, int) and
 		        isinstance(query, str) and
 		        isinstance(language, _Locale) and
 		        isinstance(currency, _Currency)):
 			raise TypeError
 
-		self.__DataFetcherObject = _DataParser(url, user_agent, quantity, query, language, currency)
+		self.__DataFetcherObject = _DataParser(url, user_agent, custom_csgo_float, quantity, query, language, currency)
 
 		self._info: list[WeaponInfo] = self.__DataFetcherObject.get_parsed_info()
 
