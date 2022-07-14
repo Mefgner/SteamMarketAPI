@@ -133,7 +133,8 @@ class _DataParser(_DataFetcher):
 					if sticker_icon_links == [] and sticker_names == [] and sticker_slots == [] and sticker_wears == []:
 						break
 					elif sticker_icon_links == [] or sticker_names == [] or sticker_slots == [] or sticker_wears == []:
-						raise RuntimeError(raw_sticker_names)  # ([sticker_icon_links, sticker_names, sticker_slots, sticker_wears])
+						raise RuntimeError(
+							raw_sticker_names)  # ([sticker_icon_links, sticker_names, sticker_slots, sticker_wears])
 			else:
 				stickers = None
 
@@ -179,19 +180,19 @@ class _DataParser(_DataFetcher):
 
 		return parse_result  # parse_result[0] if len(parse_result) == 1 else parse_result
 
-	def __init__(self, url: str, user_agen: str = '', quantity: int = 0, query: str = '',
-	             language: Locale = Locales.US, currency: Currency = Currencies.USD) -> None:
+	def __init__(self, url: str, user_agent: str = '', quantity: int = 0, query: str = '',
+	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD) -> None:
 		if not (isinstance(url, str) and
-		        isinstance(user_agen, str) and
+		        isinstance(user_agent, str) and
 		        isinstance(quantity, int) and
 		        isinstance(query, str) and
-		        isinstance(language, Locale) and
-		        isinstance(currency, Currency)):
+		        isinstance(language, _Locale) and
+		        isinstance(currency, _Currency)):
 			raise TypeError
 
 		self._url = url
-		if not user_agen == '':
-			self._user_agent = user_agen
+		if not user_agent == '':
+			self._user_agent = user_agent
 		self._quantity = quantity
 		self._filter = query
 		self._language = language.language
