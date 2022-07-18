@@ -1,7 +1,7 @@
 from typing import Any, Union, List, Dict
 from dataclasses import asdict
-from data_handlers import *
-from info import *
+from .data_handlers import *
+from .info import *
 import asyncio
 
 

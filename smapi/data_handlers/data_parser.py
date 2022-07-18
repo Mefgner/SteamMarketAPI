@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from .data_fetcher import _DataFetcher
-from info import *
+from smapi.info import *
 from typing import List, Dict, Union
 
 
