@@ -1,5 +1,18 @@
-# SteamMarketAPI
+## SteamMarketAPI
 > API that provides you to use the Steam Community Market for CS:GO game simplify.
+
+### Comon Features
+- Simple to use
+- Asynchronous
+- Fast
+
+**SteamMarketAPi** is api that provides you to use the Steam Community Market for CS:GO game simplify, trought the fetching and parsing Steam Web and CSGO FLOAT APIs
+
+## Alert
+> If you want to use this api havily you should to host CSGO FLOAT API yourself
+> [CSGO Float Api GitHub](https://github.com/csgofloat/inspect)
+
+## Code Sample
 ``` python
 from smapi import SteamMarketHandler
 
@@ -8,6 +21,11 @@ smapi_object = SteamMarketHandler(
     quantity=30
 )
 
-for lot in sm_api_object.get_as_dataclass:
+for lot in smapi_object.get_as_dataclass:
     print(lot)
+```
+
+### Installing
+``` bash
+pip3 install smapi
 ```
