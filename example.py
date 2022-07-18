@@ -18,8 +18,8 @@ async def iterate_once_example(sm_api_object: SteamMarketHandler):
 
 async def main():
 	sm_api_object = SteamMarketHandler(
-			'https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Vulcan%20%28Field-Tested%29',
-			quantity=30, language=Locales.US, currency=Currencies.UAH
+			'AK-47 | Vulcan (Field-Tested)',
+			quantity=30, language=Locales.UA, currency=Currencies.UAH
 	)
 	for lot in sm_api_object.get_as_dataclass:
 		print(lot)
@@ -33,8 +33,8 @@ async def main():
 	for lot in sm_api_object.filtered(price=True):
 		print(lot)
 
-	# Use this if you want to use filtered and sorted functions together.
-	for lot in SteamMarketHandler.filtered(sm_api_object.sorted(), price=True, nametag=True, stickers=True):
+	for lot in sm_api_object.filtered(sm_api_object.sorted(), name=False, weapon_type=False,
+	                                  description=False, collection=False):
 		print(lot)
 
 	await iterate_once_example(sm_api_object)

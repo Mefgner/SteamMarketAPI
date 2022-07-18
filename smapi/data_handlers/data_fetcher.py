@@ -38,6 +38,13 @@ class _DataFetcher(object):
 		        isinstance(count, int)):
 			raise TypeError
 
+		market_listing_base = 'https://steamcommunity.com/market/listings/730/'
+
+		if market_listing_base not in url:
+			url = market_listing_base + url
+		elif '730' not in url:
+			raise RuntimeError
+
 		link = f'{url}/render/'
 
 		return self._get_json(link, user_agent, params={

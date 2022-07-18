@@ -1,5 +1,5 @@
 # SteamMarketAPI
-> **SteamMarketAPi** is api that provides you to use the Steam Community Market for CS:GO game simplify, trought the fetching and parsing lots info from Steam Community Market and CSGO Float APIs
+> **SteamMarketAPi** is api that provides you to use the Steam Community Market for CS:GO game simplify, through the fetching and parsing lots info from Steam Community Market and CSGO Float APIs
 
 ## Common Features
 - Simple to use
@@ -16,7 +16,7 @@
 from smapi import SteamMarketHandler
 
 smapi_object = SteamMarketHandler(
-    'https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Vulcan%20%28Field-Tested%29',
+    'AK-47 | Vulcan (Field-Tested)',
     quantity=30
 )
 
