@@ -22,6 +22,7 @@ class SteamMarketHandler:
 		:param _Locale language: Language settings that you can pick from Locales class
 		:param _Currency currency: Currency settings that you can pick from Currencies class
 		:raises TypeError: If some type doesn't match"""
+
 		if not (isinstance(url, str) and
 		        isinstance(user_agent, str) and
 		        isinstance(custom_csgo_float, str) and
