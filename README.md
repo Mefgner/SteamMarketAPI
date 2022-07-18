@@ -1,6 +1,6 @@
 # SteamMarketAPI
 > API that provides you to use the Steam Community Market for CS:GO game simplify.
-''' python
+``` python
 from smapi import SteamMarketHandler
 
 smapi_object = SteamMarketHandler(
@@ -10,4 +10,4 @@ smapi_object = SteamMarketHandler(
 
 for lot in sm_api_object.get_as_dataclass:
 	print(lot)
-'''
+```
