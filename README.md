@@ -1,7 +1,7 @@
 # SteamMarketAPI
 > **SteamMarketAPi** is api that provides you to use the Steam Community Market for CS:GO game simplify, trought the fetching and parsing lots info from Steam Community Market and CSGO Float APIs
 
-## Comon Features
+## Common Features
 - Simple to use
 - Asynchronous
 - Fast
