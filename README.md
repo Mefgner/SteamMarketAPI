@@ -11,7 +11,7 @@
 - [CSGO Float Api GitHub](https://github.com/csgofloat/inspect)
 
 ## Code Sample
-> For more smaples look to examples.py
+> For more samples look to examples.py
 ``` python
 from smapi import SteamMarketHandler
 
