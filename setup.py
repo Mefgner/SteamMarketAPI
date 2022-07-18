@@ -7,6 +7,6 @@ setup(
 		license='MIT',
 		author='Mefgner',
 		author_email='mefgner@gmail.com',
-		packages=['smapi'],
+		packages=['smapi', 'smapi/data_handlers', 'smapi/info'],
 		zip_safe=False
 )
