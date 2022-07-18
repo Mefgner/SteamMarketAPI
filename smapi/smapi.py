@@ -62,6 +62,7 @@ class SteamMarketHandler:
 		
 		:return: List with dicts
 		:rtype: list[dict[str, Any]]"""
+
 		return [asdict(item) for item in self._info]
 
 	def sorted(self, another_func_result: List[Dict[str, Any]] = None, with_stickers: bool = True,
@@ -74,6 +75,7 @@ class SteamMarketHandler:
 		:return: List with dicts instead of WeaponInfo dataclasses
 		:rtype list[dict[str, Any]]:
 		:raises TypeError: If value of arguments isn't bool"""
+
 		if not (isinstance(with_stickers, bool) and isinstance(with_nametag, bool)):
 			raise TypeError
 
@@ -158,6 +160,7 @@ class SteamMarketHandler:
 		
 		:return: List with WeaponInfo dataclasses
 		:rtype list[WeaponInfo]:"""
+
 		return self._info
 
 	@property
@@ -166,4 +169,5 @@ class SteamMarketHandler:
 		
 		:return: List with dict representations of WeaponInfo dataclass
 		:rtype list[dict[str, Any]]:"""
+
 		return self._turn_to_dict()
