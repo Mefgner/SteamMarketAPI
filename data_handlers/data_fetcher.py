@@ -1,5 +1,5 @@
-import requests
 from typing import Dict, Union
+import requests
 
 
 class _DataFetcher(object):
