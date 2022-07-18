@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union, List, Dict
 from dataclasses import asdict
 from data_handlers import *
 from info import *
@@ -34,7 +34,7 @@ class SteamMarketHandler:
 
 		self._info: list[WeaponInfo] = self.__DataFetcherObject.get_parsed_info()
 
-	async def iterate_once(self, interval: float | int = 0.0) -> None:
+	async def iterate_once(self, interval: Union[float, int] = 0.0) -> None:
 		"""Gather information in internet in coroutine and puts it in itself
 		
 		:param float | int interval: Interval before information will be gathered"""
@@ -42,7 +42,7 @@ class SteamMarketHandler:
 		await asyncio.sleep(interval)
 		self._info = self.__DataFetcherObject.get_parsed_info()
 
-	async def loop(self, interval: float | int = 60):
+	async def loop(self, interval: Union[float, int] = 60):
 		"""Stars loop that will gather information with interval
 		
 		:param float | int interval: Interval before information will be gathered, min value is 60 seconds
@@ -55,14 +55,14 @@ class SteamMarketHandler:
 			await self.iterate_once(interval)
 			yield
 
-	def _turn_to_dict(self) -> list[dict[str, Any]]:
+	def _turn_to_dict(self) -> List[Dict[str, Any]]:
 		"""Returns list with dicts instead of WeaponInfo dataclasses
 		
 		:return: List with dicts
 		:rtype: list[dict[str, Any]]"""
 		return [asdict(item) for item in self._info]
 
-	def sorted(self, with_stickers: bool = True, with_nametag: bool = True) -> list[dict[str, Any]]:
+	def sorted(self, with_stickers: bool = True, with_nametag: bool = True) -> List[Dict[str, Any]]:
 		"""Returns list of dicts only which contains stickers or nametag
 		
 		Instead of self argument you can put list with dicts in not initialised class to use it with filtered function
@@ -91,7 +91,7 @@ class SteamMarketHandler:
 
 		return sorted_info
 
-	def filtered(self, **kwargs) -> list[dict[str, Any]]:
+	def filtered(self, **kwargs) -> List[Dict[str, Any]]:
 		"""Returns only fields that you chose
 		
 		Instead of self argument you can put list with dicts in not initialised class to use it with sorted function in
@@ -129,7 +129,7 @@ class SteamMarketHandler:
 		return filtered
 
 	@property
-	def get_as_dataclass(self) -> list[WeaponInfo]:
+	def get_as_dataclass(self) -> List[WeaponInfo]:
 		"""Returns info of all reached lots in dataclass form
 		
 		:return: List with WeaponInfo dataclasses
@@ -137,7 +137,7 @@ class SteamMarketHandler:
 		return self._info
 
 	@property
-	def get_as_dict(self) -> list[dict[str, Any]]:
+	def get_as_dict(self) -> List[Dict[str, Any]]:
 		"""Returns info of all reached lots in dict form
 		
 		:return: List with dict representations of WeaponInfo dataclass

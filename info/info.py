@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-
+from typing import Union, List
 
 @dataclass
 class Price:
 	"""Price dataclass gives you a possibility to you get price of weapon in any form"""
-	value: float | int
+	value: Union[float, int]
 	tag: str
 
 	def __str__(self):
@@ -35,7 +35,7 @@ class WeaponInfo:
 	description: str
 	collection: str
 	price: Price
-	stickers: list[Sticker]
+	stickers: List[Sticker]
 	nametag: str
 	lookup_link: str
 	img_link: str

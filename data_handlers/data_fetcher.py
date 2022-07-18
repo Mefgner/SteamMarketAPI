@@ -1,10 +1,11 @@
 import requests
+from typing import Dict, Union
 
 
 class _DataFetcher(object):
 
 	@staticmethod
-	def _get_page(link: str, user_agent: str, params: dict['str', [str, int]] = None):
+	def _get_page(link: str, user_agent: str, params: Dict['str', Union[str, int]] = None):
 		if not (isinstance(link, str) and
 		        isinstance(user_agent, str) and
 		        isinstance(params, dict)):
@@ -17,7 +18,8 @@ class _DataFetcher(object):
 
 		return response
 
-	def _get_json(self, link: str, user_agent: str, params: dict['str', [str, int]] = None) -> dict[str, [str, int]]:
+	def _get_json(self, link: str, user_agent: str, params: Dict['str', Union[str, int]] = None) -> Dict[
+		str, Union[str, int]]:
 		if not (isinstance(link, str) and
 		        isinstance(params, dict)):
 			raise TypeError
@@ -26,7 +28,7 @@ class _DataFetcher(object):
 		return response.json()
 
 	def get_steam_market_page(self, url: str, user_agent: str, __filter: str, language: str,
-	                          currency: str, start: int, count: int) -> dict[str, [str, int]]:
+	                          currency: str, start: int, count: int) -> Dict[str, Union[str, int]]:
 		if not (isinstance(url, str) and
 		        isinstance(user_agent, str) and
 		        isinstance(__filter, str) and

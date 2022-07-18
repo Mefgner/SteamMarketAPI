@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as bs
 from .data_fetcher import _DataFetcher
 from info import *
+from typing import List, Dict, Union
 
 
 class _DataParser(object):
@@ -30,7 +31,7 @@ class _DataParser(object):
 
 		self.fetcher = _DataFetcher()
 
-	def _get_info(self) -> dict[str, [str, int]] | list[dict]:
+	def _get_info(self) -> Union[Dict[str, Union[str, int]], List[dict]]:
 		test = self.fetcher.get_steam_market_page(self._url, self._user_agent, self._filter,
 		                                          self._language, self._currency, 0, 1)
 		if not test.get('success', False):
@@ -61,7 +62,7 @@ class _DataParser(object):
 				if total_count == 0:
 					return json_list
 
-	def _parse(self, raw: dict) -> list[WeaponInfo]:
+	def _parse(self, raw: Dict) -> List[WeaponInfo]:
 		listing = raw['listinginfo']
 		assets = raw['assets']
 		listing_info_keys: list = [x for x in listing]
@@ -194,7 +195,7 @@ class _DataParser(object):
 			if listing_info_keys == [] and assets_keys == []:
 				return weapons_list
 
-	def get_parsed_info(self) -> list[WeaponInfo]:
+	def get_parsed_info(self) -> List[WeaponInfo]:
 		raw_data = self._get_info()
 
 		parse_result = list()
