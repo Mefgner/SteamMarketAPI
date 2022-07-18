@@ -7,7 +7,7 @@
 - Fast
 
 ### Alert
-> If you want to use this api heavily you should to host CSGO FLOAT API yourself
+> If you want to use this api heavily you should to host CSGO Float API yourself
 - [CSGO Float Api GitHub](https://github.com/csgofloat/inspect)
 
 ## Code Sample

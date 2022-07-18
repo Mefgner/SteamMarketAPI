@@ -42,7 +42,7 @@ class _DataFetcher(object):
 
 		if market_listing_base not in url:
 			url = market_listing_base + url
-		elif '730' not in url:
+		elif market_listing_base.replace('730/', '') in url and '730' not in url:
 			raise RuntimeError
 
 		link = f'{url}/render/'
