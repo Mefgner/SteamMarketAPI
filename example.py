@@ -33,7 +33,7 @@ async def main():
 	for lot in sm_api_object.filtered(price=True):
 		print(lot)
 
-	# Use this if you want to use this functions together
+	# Use this if you want to use filtered and sorted functions together.
 	for lot in SteamMarketHandler.filtered(sm_api_object.sorted(), price=True, nametag=True, stickers=True):
 		print(lot)
 
