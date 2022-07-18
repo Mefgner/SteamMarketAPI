@@ -11,6 +11,7 @@
 - [CSGO Float Api GitHub](https://github.com/csgofloat/inspect)
 
 ## Code Sample
+> For more sample look to example.py
 ``` python
 from smapi import SteamMarketHandler
 
@@ -22,6 +23,7 @@ smapi_object = SteamMarketHandler(
 for lot in smapi_object.get_as_dataclass:
     print(lot)
 ```
+
 
 ### Installing
 ``` bash
