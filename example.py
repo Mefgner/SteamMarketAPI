@@ -1,4 +1,5 @@
-from smapi import SteamMarketHandler, Locales, Currencies
+from smapi import SteamMarketHandler
+from smapi.info import Currencies, Locales
 import asyncio
 
 
