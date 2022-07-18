@@ -10,7 +10,7 @@
 
 ### Alert
 > If you want to use this api heavily you should to host CSGO FLOAT API yourself
-[CSGO Float Api GitHub](https://github.com/csgofloat/inspect)
+- [CSGO Float Api GitHub](https://github.com/csgofloat/inspect)
 
 ## Code Sample
 ``` python
