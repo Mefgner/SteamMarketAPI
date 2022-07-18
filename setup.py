@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
-
+import smapi
 setup(
 		name='smapi',
-		version='0.0.7',
+		version=smapi.__version__,
 		description='Fetching and parsing info from Steam Community Market and CSGO Float Apis',
 		long_description=open('README.md', encoding='utf-8').read(),
 		long_description_content_type='text/markdown',
