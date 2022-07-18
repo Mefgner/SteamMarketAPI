@@ -9,7 +9,7 @@ class SteamMarketHandler:
 	"""The class that provides you to automatize using of Community Market in Steam for CSGO the game."""
 
 	def __init__(self, url: str, user_agent: str = '', custom_csgo_float: str = '', quantity: int = 0, query: str = '',
-	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD) -> None:
+	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD, do_first_search: bool = True):
 		"""Initializer of Steam Market Handler class
 		
 		:param str url: Link to listing in Steam Community Market, also can contain name of your weapon like an
@@ -21,6 +21,7 @@ class SteamMarketHandler:
 		just entered name of it
 		:param _Locale language: Language settings that you can pick from Locales class
 		:param _Currency currency: Currency settings that you can pick from Currencies class
+		:param bool do_first_search: If true constructor will do first search
 		:raises TypeError: If some type doesn't match"""
 
 		if not (isinstance(url, str) and
@@ -34,7 +35,7 @@ class SteamMarketHandler:
 
 		self.__DataFetcherObject = _DataParser(url, user_agent, custom_csgo_float, quantity, query, language, currency)
 
-		self._info: list[WeaponInfo] = self.__DataFetcherObject.get_parsed_info()
+		self._info: list[WeaponInfo] = self.__DataFetcherObject.get_parsed_info() if do_first_search else None
 
 	async def iterate_once(self, interval: Union[float, int] = 0.0) -> None:
 		"""Gather information in internet in coroutine and puts it in itself
@@ -161,6 +162,9 @@ class SteamMarketHandler:
 		:return: List with WeaponInfo dataclasses
 		:rtype list[WeaponInfo]:"""
 
+		if self._info is None:
+			self.iterate_once()
+
 		return self._info
 
 	@property
@@ -169,5 +173,8 @@ class SteamMarketHandler:
 		
 		:return: List with dict representations of WeaponInfo dataclass
 		:rtype list[dict[str, Any]]:"""
+
+		if self._info is None:
+			self.iterate_once()
 
 		return self._turn_to_dict()

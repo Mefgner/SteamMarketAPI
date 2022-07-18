@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Union, List
 
+
 @dataclass
 class Price:
 	"""Price dataclass gives you a possibility to you get price of weapon in any form"""
