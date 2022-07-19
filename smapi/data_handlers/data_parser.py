@@ -166,13 +166,13 @@ class _DataParser(object):
 				stickers = None
 
 			name = current_assets['market_name']
-			weapon_type_form = current_assets['type']
+			weapon_type_form = current_assets['type'] # first = Rarity, second = Weapon Type
 			if '—' in weapon_type_form:  # for Ukrainian language
-				weapon_type, rarity = weapon_type_form.split('—')
+				rarity, weapon_type = weapon_type_form.split('—')
 			elif ',' in weapon_type_form:  # for Russian language
-				weapon_type, rarity = weapon_type_form.split(',')
+				rarity, weapon_type = weapon_type_form.split(',')
 			else:  # for English language
-				weapon_type, rarity = weapon_type_form.split(' ', 1)
+				rarity, weapon_type = weapon_type_form.split(' ', 1)
 
 			weapon_type = weapon_type.strip()
 			rarity = rarity.strip().capitalize()
