@@ -1,16 +1,9 @@
 from setuptools import setup
-import os
-import smapi
-
-
-dist_dir = os.listdir('dist/')
-for file in dist_dir:
-	os.replace(f'dist/{file}', f'old_dist/{file}')
 
 setup(
 		name='smapi',
 		keywords=['smapi', 'steam', 'community', 'market', 'csgo', 'cs:go', 'listings', 'float', 'api'],
-		version=smapi.__version__,
+		version='0.1.1',
 		description='Fetching and parsing info from Steam Community Market and CSGO Float Apis',
 		long_description=open('README.md', encoding='utf-8').read(),
 		long_description_content_type='text/markdown',
