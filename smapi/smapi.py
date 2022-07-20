@@ -1,8 +1,9 @@
-from typing import Any, Union, List, Dict
+import asyncio
 from dataclasses import asdict
+from typing import Any, Union, List, Dict
+
 from .data_handlers import *
 from .info import *
-import asyncio
 
 
 class SteamMarketHandler:

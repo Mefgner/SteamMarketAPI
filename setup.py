@@ -12,7 +12,7 @@ setup(
 		author_email='mefgner@gmail.com',
 		url='https://github.com/Mefgner/SteamMarketAPI',
 		packages=['smapi', 'smapi/data_handlers', 'smapi/info'],
-		install_requires=['requests', 'bs4'],
+		install_requires=['requests==2.26.0', 'bs4==0.1'],
 		python_requires='>=3.7',
 		zip_safe=False
 )

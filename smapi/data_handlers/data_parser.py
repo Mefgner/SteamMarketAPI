@@ -1,7 +1,9 @@
-from bs4 import BeautifulSoup as bs
-from .data_fetcher import _DataFetcher
-from smapi.info import *
 from typing import List, Dict, Union
+
+from bs4 import BeautifulSoup as bs
+
+from smapi.info import *
+from .data_fetcher import _DataFetcher
 
 
 class _DataParser(object):
