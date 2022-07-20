@@ -1,7 +1,7 @@
 from typing import List, Dict, Union
 from bs4 import BeautifulSoup as bs
-from smapi.info import *
 from .data_fetcher import _DataFetcher
+from smapi.info import *
 
 
 class _DataParser(object):
@@ -166,7 +166,7 @@ class _DataParser(object):
 				stickers = None
 
 			name = current_assets['market_name']
-			weapon_type_form = current_assets['type']
+			weapon_type_form = current_assets['type']  # first = Rarity, second = Weapon Type
 			if '—' in weapon_type_form:  # for Ukrainian language
 				weapon_type, rarity = weapon_type_form.split('—')
 			elif ',' in weapon_type_form:  # for Russian language
