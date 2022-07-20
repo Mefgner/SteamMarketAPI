@@ -146,7 +146,7 @@ class _DataParser(object):
 				raw_sticker_names = tag_with_stickers.text
 				sticker_names = raw_sticker_names.split(':', 1)[1]
 				sticker_names = sticker_names.strip()
-				sticker_names = sticker_names.split(',')
+				sticker_names = sticker_names.split(',', 4)
 				sticker_names = [line.strip() for line in sticker_names]
 
 				while True:
@@ -166,11 +166,11 @@ class _DataParser(object):
 				stickers = None
 
 			name = current_assets['market_name']
-			weapon_type_form = current_assets['type'] # first = Rarity, second = Weapon Type
+			weapon_type_form = current_assets['type']  # first = Rarity, second = Weapon Type
 			if '—' in weapon_type_form:  # for Ukrainian language
-				rarity, weapon_type = weapon_type_form.split('—')
+				weapon_type, rarity = weapon_type_form.split('—')
 			elif ',' in weapon_type_form:  # for Russian language
-				rarity, weapon_type = weapon_type_form.split(',')
+				weapon_type, rarity = weapon_type_form.split(',')
 			else:  # for English language
 				rarity, weapon_type = weapon_type_form.split(' ', 1)
 
