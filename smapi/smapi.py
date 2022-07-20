@@ -83,7 +83,10 @@ class SteamMarketHandler:
 		if not isinstance(another_func_result, list):
 			info = self._turn_to_dict()
 		else:
+			if not another_func_result:
+				return [{}]
 			info = another_func_result
+
 		sorted_info = list()
 
 		for item in info:
@@ -131,6 +134,8 @@ class SteamMarketHandler:
 		if not isinstance(another_func_result, list):
 			info = self._turn_to_dict()
 		else:
+			if not another_func_result:
+				return [{}]
 			info = another_func_result
 
 		for key in kwargs:
