@@ -1,6 +1,7 @@
+import asyncio
+
 from smapi import SteamMarketHandler
 from smapi.info import Currencies, Locales
-import asyncio
 
 
 async def loop_example(sm_api_object: SteamMarketHandler):
@@ -46,6 +47,7 @@ async def main():
 	await asyncio.sleep(90)
 
 	task.cancel()
+
 
 if __name__ == '__main__':
 	asyncio.run(main())
