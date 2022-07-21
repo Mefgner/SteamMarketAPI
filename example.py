@@ -33,7 +33,7 @@ async def main():
 	for lot in sm_api_object.filtered(price=True):
 		print(lot)
 
-	for lot in sm_api_object.filtered(sm_api_object.sorted(), name=False, weapon_type=False,
+	for lot in sm_api_object.filtered(sm_api_object.sorted(), name=False, item_type=False,
 	                                  description=False, collection=False):
 		print(lot)
 

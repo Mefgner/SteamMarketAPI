@@ -8,6 +8,11 @@ import asyncio
 class SteamMarketHandler:
 	"""The class that provides you to automatize using of Community Market in Steam for CSGO the game."""
 
+	@staticmethod
+	def _check_type(value: Any, __type: type) -> None:
+		if not isinstance(value, __type):
+			raise TypeError(f'{value} is not of {__type} type')
+
 	def __init__(self, url: str, user_agent: str = '', custom_csgo_float: str = '', quantity: int = 0, query: str = '',
 	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD, do_first_search: bool = True):
 		"""Initializer of Steam Market Handler class
@@ -24,14 +29,26 @@ class SteamMarketHandler:
 		:param bool do_first_search: If true constructor will do first search
 		:raises TypeError: If some type doesn't match"""
 
-		if not (isinstance(url, str) and
-		        isinstance(user_agent, str) and
-		        isinstance(custom_csgo_float, str) and
-		        isinstance(quantity, int) and
-		        isinstance(query, str) and
-		        isinstance(language, _Locale) and
-		        isinstance(currency, _Currency)):
-			raise TypeError
+		checks = (
+				(url, str),
+				(user_agent, str),
+				(custom_csgo_float, str),
+				(quantity, int),
+				(language, _Locale),
+				(currency, _Currency),
+				(do_first_search, bool)
+		)
+		for check in checks:
+			self._check_type(check[0], check[1])
+
+		# if not (isinstance(url, str) and
+		#         isinstance(user_agent, str) and
+		#         isinstance(custom_csgo_float, str) and
+		#         isinstance(quantity, int) and
+		#         isinstance(query, str) and
+		#         isinstance(language, _Locale) and
+		#         isinstance(currency, _Currency)):
+		# 	raise TypeError
 
 		self.__DataFetcherObject = _DataParser(url, user_agent, custom_csgo_float, quantity, query, language, currency)
 
@@ -52,7 +69,7 @@ class SteamMarketHandler:
 		:raises ValueError: If interval less than 30 seconds"""
 
 		if interval < 60:
-			raise ValueError
+			raise ValueError("Interval can't be less than 60 seconds")
 
 		while True:
 			await self.iterate_once(interval)
@@ -77,8 +94,16 @@ class SteamMarketHandler:
 		:rtype list[dict[str, Any]]:
 		:raises TypeError: If value of arguments isn't bool"""
 
-		if not (isinstance(with_stickers, bool) and isinstance(with_nametag, bool)):
-			raise TypeError
+		checks = (
+				(with_stickers, bool),
+				(with_nametag, bool)
+		)
+
+		for check in checks:
+			self._check_type(check[0], check[1])
+
+		# if not (isinstance(with_stickers, bool) and isinstance(with_nametag, bool)):
+		# 	raise TypeError()
 
 		if not isinstance(another_func_result, list):
 			info = self._turn_to_dict()
@@ -140,11 +165,10 @@ class SteamMarketHandler:
 
 		for key in kwargs:
 			if key not in info[0]:
-				raise ValueError
+				raise ValueError(f'{key} is not a key\nSupported keys: {info[0].keys()}')
 
 		for value in kwargs.values():
-			if not isinstance(value, bool):
-				raise TypeError
+			self._check_type(value, bool)
 
 		filtered = list()
 		for item in info:

@@ -2,6 +2,7 @@ from typing import List, Dict, Union
 from bs4 import BeautifulSoup as bs
 from .data_fetcher import _DataFetcher
 from smapi.info import *
+from smapi.errors import SteamBadRequestError, BadParsedStickersError
 
 
 class _DataParser(object):
@@ -10,14 +11,14 @@ class _DataParser(object):
 
 	def __init__(self, url: str, user_agent: str = '', custom_csgo_float: str = '', quantity: int = 0, query: str = '',
 	             language: _Locale = Locales.US, currency: _Currency = Currencies.USD) -> None:
-		if not (isinstance(url, str) and
-		        isinstance(user_agent, str) and
-		        isinstance(custom_csgo_float, str) and
-		        isinstance(quantity, int) and
-		        isinstance(query, str) and
-		        isinstance(language, _Locale) and
-		        isinstance(currency, _Currency)):
-			raise TypeError
+		# if not (isinstance(url, str) and
+		#         isinstance(user_agent, str) and
+		#         isinstance(custom_csgo_float, str) and
+		#         isinstance(quantity, int) and
+		#         isinstance(query, str) and
+		#         isinstance(language, _Locale) and
+		#         isinstance(currency, _Currency)):
+		# 	raise TypeError
 
 		self._url = url
 		if not user_agent == '':
@@ -34,8 +35,8 @@ class _DataParser(object):
 	def _get_info(self) -> Union[Dict[str, Union[str, int]], List[dict]]:
 		test = self.fetcher.get_steam_market_page(self._url, self._user_agent, self._filter,
 		                                          self._language, self._currency, 0, 1)
-		if not test.get('success', False):
-			raise RuntimeError
+		if not test['success'] or test['total_count'] == 0:
+			raise SteamBadRequestError(self._url, self._filter)
 
 		total_count = test['total_count']
 		if self._quantity > total_count or self._quantity == 0:
@@ -66,7 +67,10 @@ class _DataParser(object):
 		listing = raw['listinginfo']
 		assets = raw['assets']
 		listing_info_keys: list = [x for x in listing]
-		assets_keys: list = [x for x in assets['730']['2']]
+		try:
+			assets_keys: list = [x for x in assets['730']['2']]
+		except TypeError:
+			raise ConnectionError('Too many requests to Steam API')
 
 		weapons_list = list()
 		while True:
@@ -97,29 +101,35 @@ class _DataParser(object):
 			listing_info_key = listing_info_keys.pop(0)
 
 			current_listing = listing[listing_info_key]
-			current_listings_asset = current_listing['asset']
+			current_listings_asset: dict = current_listing['asset']
 
 			listing_id = listing_info_key
 			asset_id = current_listings_asset['id']
 
-			lookup_link_form = current_listings_asset['market_actions'][0]['link']
-			lookup_link = lookup_link_form.replace('%listingid%', listing_id).replace('%assetid%', asset_id)
+			lookup_link_form = current_listings_asset.get('market_actions')
+			if lookup_link_form is not None:
+				lookup_link_form = lookup_link_form[0]['link']
+				lookup_link = lookup_link_form.replace('%listingid%', listing_id).replace('%assetid%', asset_id)
 
-			float_api_response = self.fetcher.get_float_api_page(lookup_link, self._user_agent, self._custom_csgo_float)
+				float_api_response = self.fetcher.get_float_api_page(lookup_link, self._user_agent, self._custom_csgo_float)
 
-			float_api_response_body = float_api_response['iteminfo']
-			float_api_stickers = float_api_response_body['stickers']
+				float_api_response_body = float_api_response['iteminfo']
+				float_api_stickers = float_api_response_body['stickers']
 
-			if not float_api_stickers == []:
-				for sticker in float_api_stickers:
-					sticker_slots.append(sticker['slot'])
-					sticker_wears.append(sticker.get('wear', 0.0))
+				if not float_api_stickers == []:
+					for sticker in float_api_stickers:
+						sticker_slots.append(sticker['slot'])
+						sticker_wears.append(sticker.get('wear', 0.0))
 
-			weapon_wear = float_api_response_body['floatvalue']
+				weapon_wear = float_api_response_body['floatvalue']
 
-			paint_seed = float_api_response_body['paintseed']
-			paint_index = float_api_response_body['paintindex']
-
+				paint_seed = float_api_response_body['paintseed']
+				paint_index = float_api_response_body['paintindex']
+			else:
+				paint_index = None
+				paint_seed = None
+				weapon_wear = None
+				lookup_link = None
 			converted_price = current_listing['converted_price']
 			converted_fee = current_listing['converted_fee']
 			price_float = (converted_price + converted_fee) / 100
@@ -135,10 +145,10 @@ class _DataParser(object):
 			descriptions = current_assets['descriptions']
 			description_html = descriptions[2]['value']
 			description = bs(description_html, 'html.parser').text
-			collection = descriptions[4]['value']
+			collection = descriptions[4]['value'] if len(descriptions) > 4 and descriptions[4] != ' ' else None
 
-			if (len(descriptions) == 7 and descriptions[6]['value'] != ' ') or len(descriptions) == 8:
-				html_with_stickers = descriptions[len(descriptions) - 1]['value']
+			if len(descriptions) >= 7 and descriptions[-1]['value'] != ' ':
+				html_with_stickers = descriptions[-1]['value']
 				raw_stickers = bs(html_with_stickers, 'html.parser')
 				tag_with_stickers = raw_stickers.find('center')
 				sticker_icons = tag_with_stickers.find_all('img')
@@ -161,12 +171,12 @@ class _DataParser(object):
 					if sticker_icon_links == [] and sticker_names == [] and sticker_slots == [] and sticker_wears == []:
 						break
 					elif sticker_icon_links == [] or sticker_names == [] or sticker_slots == [] or sticker_wears == []:
-						raise RuntimeError(raw_sticker_names)
+						raise BadParsedStickersError(sticker_names, raw_sticker_names)
 			else:
 				stickers = None
 
 			name = current_assets['market_name']
-			weapon_type_form = current_assets['type']  # first = Rarity, second = Weapon Type
+			weapon_type_form = current_assets['type'].replace('(', '').replace(')', '')
 			if '—' in weapon_type_form:  # for Ukrainian language
 				weapon_type, rarity = weapon_type_form.split('—')
 			elif ',' in weapon_type_form:  # for Russian language

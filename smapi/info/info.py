@@ -31,7 +31,7 @@ class Sticker:
 class WeaponInfo:
 	"""Weapon class contains general information about the weapon"""
 	name: str
-	weapon_type: str
+	item_type: str
 	rarity: str
 	description: str
 	collection: str
