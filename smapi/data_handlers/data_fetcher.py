@@ -11,7 +11,7 @@ class _DataFetcher(object):
 		#         isinstance(user_agent, str) and
 		#         isinstance(params, dict)):
 		# 	raise TypeError
-		print(1)
+
 		response = requests.get(link, params=params, headers={'user-agent': user_agent})
 
 		if not response.status_code == 200:
@@ -38,7 +38,7 @@ class _DataFetcher(object):
 		#         isinstance(start, int) and
 		#         isinstance(count, int)):
 		# 	raise TypeError
-		print(2)
+
 		market_listing_base = 'https://steamcommunity.com/market/listings/730/'
 
 		if market_listing_base not in url:
