@@ -1,5 +1,5 @@
 from typing import Dict, Union
-from smapi.errors import SteamConnectionError, CSGOFloatConnectionError, BadLinkError
+from smapi.errors import SteamConnectionError, CSFloatConnectionError, BadLinkError
 import requests
 
 
@@ -11,11 +11,11 @@ class _DataFetcher(object):
 		#         isinstance(user_agent, str) and
 		#         isinstance(params, dict)):
 		# 	raise TypeError
-
+		print(1)
 		response = requests.get(link, params=params, headers={'user-agent': user_agent})
 
 		if not response.status_code == 200:
-			raise ConnectionError
+			raise ConnectionError(response)
 
 		return response
 
@@ -38,13 +38,13 @@ class _DataFetcher(object):
 		#         isinstance(start, int) and
 		#         isinstance(count, int)):
 		# 	raise TypeError
-
+		print(2)
 		market_listing_base = 'https://steamcommunity.com/market/listings/730/'
 
 		if market_listing_base not in url:
 			url = market_listing_base + url
 		elif market_listing_base.replace('730/', '') in url and '730' not in url:
-			raise BadLinkError('The link you typed isn`t CSGO Market Listings')
+			raise BadLinkError('The link you typed isn`t CS Market Listings')
 
 		link = f'{url}/render/'
 
@@ -52,9 +52,9 @@ class _DataFetcher(object):
 			return self._get_json(link, user_agent, params={
 				'filter': __filter, 'start': start, 'count': count,
 				'language': language, 'currency': currency
-		})
-		except ConnectionError:
-			raise SteamConnectionError
+			})
+		except ConnectionError as e:
+			raise SteamConnectionError(e)
 
 	def get_float_api_page(self, lookup_link: str, user_agent: str, custom_link: str = ''):
 		# if not (isinstance(lookup_link, str) and
@@ -69,6 +69,6 @@ class _DataFetcher(object):
 		try:
 			return self._get_json(link, user_agent, params={
 				'url': lookup_link
-		})
-		except ConnectionError:
-			raise CSGOFloatConnectionError
+			})
+		except ConnectionError as e:
+			raise CSFloatConnectionError(e)

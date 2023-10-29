@@ -14,6 +14,6 @@ class SteamBadRequestError(Exception):
 		)
 
 
-class CSGOFloatConnectionError(Exception):
+class CSFloatConnectionError(Exception):
 	"""Raises when response code isn't 200"""
 	pass
