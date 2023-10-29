@@ -3,7 +3,6 @@ import asyncio
 from smapi import SteamMarketHandler
 from smapi.info import Currencies, Locales
 
-
 async def loop_example(sm_api_object: SteamMarketHandler):
 	async for _ in sm_api_object.loop():
 		for lot in sm_api_object.get_as_dataclass:
